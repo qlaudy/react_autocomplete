@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Person } from './types/Person';
 
 interface Props {
@@ -28,9 +28,11 @@ export const Autocomplete: React.FC<Props> = ({
     return () => clearTimeout(handler);
   }, [query, delay]);
 
-  const filteredPeople = people.filter(person =>
-    person.name.toLowerCase().includes(appliedQuery.trim().toLowerCase()),
-  );
+  const filteredPeople = useMemo(() => {
+    return people.filter(person =>
+      person.name.toLowerCase().includes(appliedQuery.trim().toLowerCase()),
+    );
+  }, [appliedQuery, people]);
 
   return (
     <>
@@ -49,7 +51,7 @@ export const Autocomplete: React.FC<Props> = ({
               onSelected(null);
             }}
             onFocus={() => setIsOpen(true)}
-            onBlur={() => setIsOpen(false)}
+            onBlur={() => setTimeout(() => setIsOpen(false), 200)}
           />
         </div>
 
