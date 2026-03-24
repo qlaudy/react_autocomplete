@@ -13,7 +13,7 @@ export const Autocomplete: React.FC<Props> = ({
   delay = 300,
 }) => {
   const [query, setQuery] = useState('');
-  const [appliedQuery, setAppleidQuery] = useState(query);
+  const [appliedQuery, setAppliedQuery] = useState(query);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -22,14 +22,14 @@ export const Autocomplete: React.FC<Props> = ({
     }
 
     const handler = setTimeout(() => {
-      setAppleidQuery(query);
+      setAppliedQuery(query);
     }, delay);
 
     return () => clearTimeout(handler);
   }, [query, delay]);
 
   const filteredPeople = people.filter(person =>
-    person.name.toLowerCase().includes(appliedQuery.toLowerCase()),
+    person.name.toLowerCase().includes(appliedQuery.trim().toLowerCase()),
   );
 
   return (
@@ -49,6 +49,7 @@ export const Autocomplete: React.FC<Props> = ({
               onSelected(null);
             }}
             onFocus={() => setIsOpen(true)}
+            onBlur={() => setIsOpen(false)}
           />
         </div>
 
@@ -63,7 +64,7 @@ export const Autocomplete: React.FC<Props> = ({
                   onClick={() => {
                     onSelected(person);
                     setQuery(person.name);
-                    setAppleidQuery(person.name);
+                    setAppliedQuery(person.name);
                     setIsOpen(false);
                   }}
                 >
